@@ -13,6 +13,7 @@ import {
 } from '../../services/ordersSlice';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
+import { UserSelector } from '../../services/authSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector(isLoadingSelector);
   const orderModalData = useSelector(orderSelector);
   const navigate = useNavigate();
+  const user = useSelector(UserSelector);
 
   const data: string[] = [
     ...constructorItems.ingredients.map((ingredient) => ingredient._id),
@@ -28,6 +30,10 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    if (!user) {
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
     dispatch(postOrderBurger(data));
   };
 

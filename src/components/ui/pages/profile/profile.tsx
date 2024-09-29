@@ -64,7 +64,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
           />
         </div>
         {isFormChanged && (
-          <div className={styles.button} data-cy='save'>
+          <div className={styles.button}>
             <Button
               type='secondary'
               htmlType='button'

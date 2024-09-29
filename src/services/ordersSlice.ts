@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TOrder, RequestStatus } from '../utils/types';
+import { TOrder } from '@utils-types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getFeedsApi,
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi
-} from './../utils/burger-api';
+} from '@api';
 
 export const getFeeds = createAsyncThunk('orders/getFeeds', async () => {
   const res = await getFeedsApi();
@@ -44,7 +44,6 @@ export interface IOrderState {
   totalToday: number | null;
   isLoading: boolean;
   error: string | undefined | null;
-  status: RequestStatus;
 }
 
 export const initialState: IOrderState = {
@@ -56,8 +55,7 @@ export const initialState: IOrderState = {
   total: null,
   totalToday: null,
   isLoading: false,
-  error: null,
-  status:RequestStatus.Idle
+  error: null
 };
 
 export const ordersSlice = createSlice({
@@ -82,14 +80,12 @@ export const ordersSlice = createSlice({
     builder
       .addCase(getFeeds.pending, (state) => {
         state.isLoading = true;
-        state.status = RequestStatus.Loading;
       })
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
-        state.status = RequestStatus.Success;
       })
       .addCase(getFeeds.rejected, (state, action) => {
         state.isLoading = false;
@@ -97,53 +93,43 @@ export const ordersSlice = createSlice({
         state.orders = [];
         state.total = 0;
         state.totalToday = 0;
-        state.status = RequestStatus.Failed;
       });
     builder
       .addCase(getOrders.pending, (state) => {
         state.isLoading = true;
-        state.status = RequestStatus.Loading;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.isLoading = false;
         state.personOrders = action.payload;
-        state.status = RequestStatus.Success;
       })
       .addCase(getOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        state.status = RequestStatus.Failed;
       });
     builder
       .addCase(postOrderBurger.pending, (state) => {
         state.isLoading = true;
-        state.status = RequestStatus.Loading;
       })
       .addCase(postOrderBurger.fulfilled, (state, action) => {
         state.isLoading = false;
         state.order = action.payload.order;
         state.name = action.payload.name;
-        state.status = RequestStatus.Success;
       })
       .addCase(postOrderBurger.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        state.status = RequestStatus.Failed;
       });
     builder
       .addCase(getOrderByNumber.pending, (state) => {
         state.isLoading = true;
-        state.status = RequestStatus.Loading;
       })
       .addCase(getOrderByNumber.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orderModal = action.payload.orders;
-        state.status = RequestStatus.Success;
       })
       .addCase(getOrderByNumber.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        state.status = RequestStatus.Failed;
       });
   }
 });

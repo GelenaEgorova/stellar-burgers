@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TUser } from '@utils-types';
+import { TUser, RequestStatus } from '../utils/types';
 import {
   getUserApi,
   loginUserApi,
@@ -8,7 +8,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from './../utils/burger-api';
 import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -71,13 +71,15 @@ interface IUserState {
   isAuthChecked: boolean;
   error: string | null | undefined;
   loading: boolean;
+  requestStatus: RequestStatus;
 }
 
-const initialState: IUserState = {
+export const initialState: IUserState = {
   user: null,
   isAuthChecked: false,
   error: null,
-  loading: false
+  loading: false,
+  requestStatus: RequestStatus.Idle
 };
 
 export const authSlice = createSlice({
@@ -96,38 +98,47 @@ export const authSlice = createSlice({
     builder
       .addCase(signInUser.pending, (state) => {
         state.loading = true;
+        state.requestStatus = RequestStatus.Loading;
       })
       .addCase(signInUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.requestStatus = RequestStatus.Success;
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.requestStatus = RequestStatus.Failed;
       });
     builder
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
+        state.requestStatus = RequestStatus.Loading;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.requestStatus = RequestStatus.Success;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.requestStatus = RequestStatus.Failed;
       });
     builder
       .addCase(logOutUser.fulfilled, (state) => {
         state.user = null;
+        state.requestStatus = RequestStatus.Success;
       })
       .addCase(logOutUser.rejected, (state, action) => {
         state.error = action.error.message;
+        state.requestStatus = RequestStatus.Failed;
       });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.user = action.payload.user;
+      state.requestStatus = RequestStatus.Success;
     });
   },
   selectors: {

@@ -14,7 +14,7 @@ export const rootReducer = combineSlices(
   ordersSlice,
   constructorSlice,
   authSlice
-); // Заменить на импорт настоящего редьюсера
+);
 
 const store = configureStore({
   reducer: rootReducer,

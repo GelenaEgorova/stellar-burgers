@@ -37,7 +37,7 @@ export const ingredientsSlice = createSlice({
         state.status = RequestStatus.Loading;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-
+        state.isLoading = false;
         state.ingredients = action.payload;
         state.status = RequestStatus.Success;
       })

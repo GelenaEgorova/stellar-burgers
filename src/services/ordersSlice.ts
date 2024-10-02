@@ -57,7 +57,7 @@ export const initialState: IOrderState = {
   totalToday: null,
   isLoading: false,
   error: null,
-  status:RequestStatus.Idle
+  status: RequestStatus.Idle
 };
 
 export const ordersSlice = createSlice({

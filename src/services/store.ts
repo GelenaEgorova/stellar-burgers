@@ -14,7 +14,7 @@ export const rootReducer = combineSlices(
   ordersSlice,
   constructorSlice,
   authSlice
-); 
+);
 
 const store = configureStore({
   reducer: rootReducer,

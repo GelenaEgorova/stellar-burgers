@@ -9,28 +9,24 @@ export const rootReducer = combineSlices(
   ingredientsSlice,
   ordersSlice,
   authSlice
-); 
+);
 
-describe('Тесты для rootReducer', ()=> {
-    test('Проверка правильной инициализации', ()=>{
-        const store = configureStore({
-            reducer: rootReducer,
-            devTools: false
-        });
-        expect(store.getState()).toEqual({
-            [ingredientsSlice.name]:ingredientsSlice.reducer(undefined,{
-                type: '@@INIT'
-            }),
-            [ordersSlice.name]:ordersSlice.reducer(undefined,{
-                type: '@@INIT'
-            }),
-            [authSlice.name]:authSlice.reducer(undefined,{
-                type: '@@INIT'
-            }),
-        })
-    })
-
+describe('Тесты для rootReducer', () => {
+  test('Проверка правильной инициализации', () => {
+    const store = configureStore({
+      reducer: rootReducer,
+      devTools: false
+    });
+    expect(store.getState()).toEqual({
+      [ingredientsSlice.name]: ingredientsSlice.reducer(undefined, {
+        type: '@@INIT'
+      }),
+      [ordersSlice.name]: ordersSlice.reducer(undefined, {
+        type: '@@INIT'
+      }),
+      [authSlice.name]: authSlice.reducer(undefined, {
+        type: '@@INIT'
+      })
+    });
+  });
 });
-
-
-
